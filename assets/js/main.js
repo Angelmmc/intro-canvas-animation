@@ -7,9 +7,9 @@ let panoramic = new Image();
 const ctx = document.getElementById("canvasSolarSystem").getContext("2d");
 
 function init() {
-    sun.src = "/assets/img/canvas_sun.png"; sun.height = 100;
-    moon.src = "/assets/img/canvas_moon.png";
-    earth.src = "/assets/img/canvas_earth.png";
+    sun.src = "./assets/img/canvas_sun.png"; sun.height = 100;
+    moon.src = "./assets/img/canvas_moon.png";
+    earth.src = "./assets/img/canvas_earth.png";
     window.requestAnimationFrame(draw);
     window.requestAnimationFrame(clock);
     drawPanoramic();
@@ -166,7 +166,7 @@ function clock() {
 
 // User Variables - customize these to change the image being scrolled, its
 // direction, and the speed.
-panoramic.src = "/assets/img/panoramic.jpg";
+panoramic.src = "./assets/img/panoramic.jpg";
 const canvasXSize = 300;
 const canvasYSize = 300;
 const speed = 25; // lower is faster
