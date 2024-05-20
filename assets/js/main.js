@@ -2,6 +2,7 @@
 let sun = new Image();
 let moon = new Image();
 let earth = new Image();
+let panoramic = new Image();
 
 const ctx = document.getElementById("canvasSolarSystem").getContext("2d");
 
@@ -11,6 +12,7 @@ function init() {
     earth.src = "/assets/img/canvas_earth.png";
     window.requestAnimationFrame(draw);
     window.requestAnimationFrame(clock);
+    drawPanoramic();
 }
 
 function draw() {
@@ -159,6 +161,84 @@ function clock() {
     ctx.restore();
 
     window.requestAnimationFrame(clock);
+}
+
+
+// User Variables - customize these to change the image being scrolled, its
+// direction, and the speed.
+panoramic.src = "/assets/img/panoramic.jpg";
+const canvasXSize = 300;
+const canvasYSize = 300;
+const speed = 25; // lower is faster
+const scale = 0.09;
+const y = -4.5; // vertical offset
+
+// Main program
+const dx = 0.75;
+let imgW;
+let imgH;
+let x = 0;
+let clearX;
+let clearY;
+let ctxPanoram;
+
+panoramic.onload = () => {
+    imgW = panoramic.width * scale;
+    imgH = panoramic.height * scale;
+  
+    if (imgW > canvasXSize) {
+      // Image larger than canvas
+      x = canvasXSize - imgW;
+    }
+  
+    // Check if image dimension is larger than canvas
+    clearX = Math.max(imgW, canvasXSize);
+    clearY = Math.max(imgH, canvasYSize);
+  
+    // Get canvas context
+    ctxPanoram = document.getElementById("canvasPanoramic").getContext("2d");
+  
+    // Set refresh rate
+    return setInterval(drawPanoramic, speed);
+  };
+
+function drawPanoramic() {
+    ctxPanoram.clearRect(0, 0, clearX, clearY); // clear the canvas
+
+  // If image is <= canvas size
+  if (imgW <= canvasXSize) {
+    // Reset, start from beginning
+    if (x > canvasXSize) {
+      x = -imgW + x;
+    }
+
+    // Draw additional image1
+    if (x > 0) {
+        ctxPanoram.drawImage(panoramic, -imgW + x, y, imgW, imgH);
+    }
+
+    // Draw additional image2
+    if (x - imgW > 0) {
+        ctxPanoram.drawImage(panoramic, -imgW * 2 + x, y, imgW, imgH);
+    }
+  } else {
+    // Image is > canvas size
+    // Reset, start from beginning
+    if (x > canvasXSize) {
+      x = canvasXSize - imgW;
+    }
+
+    // Draw additional image
+    if (x > canvasXSize - imgW) {
+        ctxPanoram.drawImage(panoramic, x - imgW + 1, y, imgW, imgH);
+    }
+  }
+
+  // Draw image
+  ctxPanoram.drawImage(panoramic, x, y, imgW, imgH);
+
+  // Amount to move
+  x += dx;
 }
 
 init();
